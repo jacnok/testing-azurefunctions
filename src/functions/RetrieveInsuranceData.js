@@ -13,7 +13,7 @@ app.use(cors({
 */
 
 app.http('HelloWorld', {
-    methods: ['POST'],
+    methods: ['GET','POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
@@ -25,7 +25,7 @@ app.http('HelloWorld', {
 });
 
 app.http('TestData', {
-    methods: ['POST'],
+    methods: ['GET','POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
@@ -48,7 +48,7 @@ app.http('TestData', {
 });
 
 app.http('RetrieveInsuranceData', {
-    methods: ['POST'],
+    methods: ['GET','POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
@@ -66,6 +66,80 @@ app.http('RetrieveInsuranceData', {
             history_f2,
             history_f3    
             } = await request.json();
+
+
+            function agePoints(age) {
+                var x = 0;
+            
+                if (age < 30)
+                {
+                    return (x = 0);
+                }
+                else if (age < 45)
+                {
+                    return (x = 10);
+                }
+                else if (age < 60)
+                {
+                    return (x = 20);
+                }
+                else
+                {
+                    return (x = 30);
+                }
+            }
+            
+            function BMIPoints(height_cm, height_ft, height_in, weight_kg, weight_lb) {
+                var meters = 0
+                var x = 0
+            
+                if (height_ft > 0)
+                {
+                    meters = (((height_ft * 12) + height_in) * 2.54) / 100
+                } else {
+                    meters = height_cm / 100
+                }
+            
+                if (weight_lb > 0)
+                {
+                    weight_kg = weight_lb * 0.453592;
+                }
+            
+                var bmi = weight_kg / Math.pow(meters, 2);
+            
+                if (bmi <= 24.9) {
+                    return (x = 0);
+                } else if (bmi <= 29.9) {
+                    return (x = 30);
+                } else {
+                    return (x = 75);
+                }
+            }
+            
+            function BPPoints(pressure_sys, pressure_dia) {
+                x = 0
+            
+                if (pressure_sys < 120 && pressure_dia < 80)
+                    {
+                        return (x = 0);
+                    }
+                    else if (pressure_sys < 130 && pressure_dia < 80)
+                    {
+                        return (x = 15);
+                    }
+                    else if (pressure_sys < 140 || pressure_dia < 90)
+                    {
+                        return (x = 30);
+                    }
+                    else if (pressure_sys < 180 || pressure_dia < 119)
+                    {
+                        return (x = 75);
+                    }
+                    else
+                    {
+                        return (x = 100);
+                    }
+            }
 
             var pointCounter = 0;
             var riskCategory = "uncalculated";
@@ -115,75 +189,3 @@ app.http('RetrieveInsuranceData', {
     }
 });
 
-function agePoints(age) {
-    var x = 0;
-
-    if (age < 30)
-    {
-        return (x = 0);
-    }
-    else if (age < 45)
-    {
-        return (x = 10);
-    }
-    else if (age < 60)
-    {
-        return (x = 20);
-    }
-    else
-    {
-        return (x = 30);
-    }
-}
-
-function BMIPoints(height_cm, height_ft, height_in, weight_kg, weight_lb) {
-    var meters = 0
-    var x = 0
-
-    if (height_ft > 0)
-    {
-        meters = (((height_ft * 12) + height_in) * 2.54) / 100
-    } else {
-        meters = height_cm / 100
-    }
-
-    if (weight_lb > 0)
-    {
-        weight_kg = weight_lb * 0.453592;
-    }
-
-    var bmi = weight_kg / Math.pow(meters, 2);
-
-    if (bmi <= 24.9) {
-        return (x = 0);
-    } else if (bmi <= 29.9) {
-        return (x = 30);
-    } else {
-        return (x = 75);
-    }
-}
-
-function BPPoints(pressure_sys, pressure_dia) {
-    x = 0
-
-    if (pressure_sys < 120 && pressure_dia < 80)
-        {
-            return (x = 0);
-        }
-        else if (pressure_sys < 130 && pressure_dia < 80)
-        {
-            return (x = 15);
-        }
-        else if (pressure_sys < 140 || pressure_dia < 90)
-        {
-            return (x = 30);
-        }
-        else if (pressure_sys < 180 || pressure_dia < 119)
-        {
-            return (x = 75);
-        }
-        else
-        {
-            return (x = 100);
-        }
-}
